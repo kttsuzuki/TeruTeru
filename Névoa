@@ -1,0 +1,54 @@
+//Script responsável por ativar ou desligar as partículas de névoa
+
+
+
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class Nevoa : MonoBehaviour
+{
+    // Start is called before the first frame update
+
+    ParticleSystem NevoaParticulas;
+
+    private AtivaTorre_Nevoa ativaTorre_Nevoa;
+    bool EstaNevoa;
+
+
+    void Start()
+    {
+        ativaTorre_Nevoa = FindObjectOfType<AtivaTorre_Nevoa>();// Puxa variável que está em outro script
+        NevoaParticulas = GetComponent<ParticleSystem>();// Atribui variável ao sistema de partículas do objeto, no caso, da névoa.
+
+        EstaNevoa = true;//Indica que está com névoa
+        NevoaParticulas.Play();//Começa com as particulas ativas
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+
+        if (ativaTorre_Nevoa.BateuNaTorre_Nevoa)// Verifica se houve colisão com o player na torre da névoa
+        {
+
+            if (Input.GetKeyDown(KeyCode.Space))// Verifica se o player pressionou espaço para interagir com a torre
+            {
+                if (EstaNevoa)//Se já está com névoa
+                {
+                    NevoaParticulas.Stop();//Desliga particulas
+                    EstaNevoa = false;//Indica que não está com névoa
+                }
+
+                else
+                {
+                    NevoaParticulas.Play();//Liga particulas
+                    EstaNevoa = true;//Indica que está com névoa
+                }
+
+            }
+
+        }
+
+    }
+}
