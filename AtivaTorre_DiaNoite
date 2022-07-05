@@ -1,0 +1,39 @@
+//script aplicado na torre que ativa o efeito de dia e noite, que está associado a um outro script 
+
+
+
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class AtivaTorre_DiaNoite : MonoBehaviour
+{
+    // Start is called before the first frame update
+    public bool BateuNaTorre_DiaNoite;
+
+    void Start()
+    {
+        BateuNaTorre_DiaNoite = false; //Inicia indicando que não há interação
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.tag == "Player") //Identifica se a colisão foi com o player
+        {
+            Debug.Log("bateu");
+            BateuNaTorre_DiaNoite = true; //Indica que o player pode interagir com a torre
+
+        }
+        else
+        {
+            BateuNaTorre_DiaNoite = false;//Indica que a interação está desligada
+
+        }
+    }
+}
