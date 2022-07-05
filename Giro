@@ -1,3 +1,7 @@
+//script usado para mudar a direção do personagem de acordo com o movimento do mouse
+
+
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
