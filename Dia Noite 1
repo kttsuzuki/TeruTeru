@@ -1,0 +1,148 @@
+//Esse script é responsável por realizar a movimentação da luz usada para o dia e por aumentar ou diminuir sua intensidade
+
+
+
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class DiaNoite1 : MonoBehaviour
+{
+    // Start is called before the first frame update
+
+    float angulo = 270f;
+
+    [SerializeField] float velocidadeTransicaoDiaNoite = 0.05f; //Velocidade de rotação da luz
+    [SerializeField] float velocidadeTransicaoNoiteDia = 0.05f; //Velocidade de rotação da luz
+    Light directLight;
+    bool MudaDiaNoite, EstaDeDia, EstaDeNoite, TransicaoDiaNoite;
+
+
+    float IntensidadeLuzDia;
+
+    private AtivaTorre_DiaNoite ativaTorre_DiaNoite;
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        ativaTorre_DiaNoite = FindObjectOfType<AtivaTorre_DiaNoite>();
+
+        MudaDiaNoite = false; //Desliga o efeito de rotacao
+        EstaDeNoite = true;//Indica que é noite
+        EstaDeDia = false;//Indica que é dia
+        TransicaoDiaNoite = false;//Indica que não é para executar a mudança de intensidade de luz
+
+        directLight = GetComponent<Light>(); 
+
+        IntensidadeLuzDia = 0f;
+
+
+
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+
+
+
+        if (ativaTorre_DiaNoite.BateuNaTorre_DiaNoite) // A partir dos sripts AtivaTorres, identifica se houve colisão com o player
+        {
+
+            if (Input.GetKeyDown(KeyCode.Space)) //Player aperta espaço quando colide com uma torre para ativar os efeitos
+            {
+                MudaDiaNoite = true; //Ativa rotação da luz
+                TransicaoDiaNoite = true; //Ativa mudança de intensidade
+            
+            }
+        }
+
+
+
+        if (MudaDiaNoite)
+        {
+
+            if (EstaDeDia)
+            {
+                MudaHora(); //Função realiza a rotação da luz
+                
+
+
+                if (angulo >= 270f) // Quando está durante o dia, a luz rotaciona até atingir o valor de 270°
+                {
+                    EstaDeDia = false; //Afirma que não está mais durante o dia
+                    EstaDeNoite = true; // Indica que é noite
+                    MudaDiaNoite = false; //Desliga o efeito de rotação
+
+                }
+            }
+
+            if (EstaDeNoite)
+            {
+
+                MudaHora();//Função realiza a rotação da luz
+
+
+                if (angulo >= 450f)
+                {
+                    EstaDeDia = true;// Indica que é dia
+                    EstaDeNoite = false;//Afirma que não está mais durante a noite
+                    MudaDiaNoite = false;//Desliga o efeito de rotação
+                    angulo = 90f; //Recomeça o ciclo voltando o valor do ângulo para 90, portando girando -360°
+
+                }
+            }
+
+
+
+        }
+
+        if (TransicaoDiaNoite) //Identifica se é para mudar a intensidade
+        {
+            Transicao();
+        }
+
+
+    }
+
+
+    void MudaHora()
+    {
+        //Muda a rotação da luz gradualmente a medida que o valor "velocidade" é acrescentado.
+        angulo += velocidade;
+        Quaternion rotacao = Quaternion.Euler(angulo, 100, 0);
+        directLight.transform.rotation = rotacao;
+        
+    }
+
+
+    void Transicao()
+    {
+        if (EstaDeDia)
+        {
+            //Diminui gradualmente a intensidade da luz de acordo com o valor "velocidadeTransicaoDiaNoite"
+            IntensidadeLuzDia -= velocidadeTransicaoDiaNoite;
+            directLight.intensity = IntensidadeLuzDia;
+
+            if (IntensidadeLuzDia <= 0) //Efeito é desativado quando a intensidade da luz atinge 0
+            {
+                TransicaoDiaNoite = false;
+            }
+        }
+
+
+        if (EstaDeNoite)
+        {
+            //Aumenta gradualmente a intensidade da luz de acordo com o valor "velocidadeTransicaoDiaNoite"
+            IntensidadeLuzDia += velocidadeTransicaoNoiteDia;
+            directLight.intensity = IntensidadeLuzDia;
+
+            if (IntensidadeLuzDia >= 1)//Efeito é desativado quando a intensidade da luz atinge 1
+            {
+                TransicaoDiaNoite = false;
+            }
+        }
+    }
+
+
+}
