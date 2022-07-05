@@ -1,0 +1,25 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class Giro : MonoBehaviour
+{
+    Rigidbody rb;
+    [SerializeField] float Sensibilidade;
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        rb = GetComponent<Rigidbody>(); // Atribui o rigid body para a variável rb
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        float ValorDeGiroEixoY = Input.GetAxis("Mouse X"); // Retorna um valor de -1 ou 1 de acordo com o movimento no Eixo X do mouse
+        rb.transform.Rotate(new Vector3(0, ValorDeGiroEixoY * Sensibilidade, 0)); // Rotaciona o personagem e a câmera atribuída a ele
+                                                                                  //Além disso, a variável "Sensibilidade" é usada para
+                                                                                  //controlar o quanto o se gira com o movimento do mouse
+
+    }
+}
