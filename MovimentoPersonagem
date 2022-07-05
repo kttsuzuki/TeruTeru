@@ -1,0 +1,31 @@
+sing System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class MovimentoPersonagem : MonoBehaviour
+{
+    // Start is called before the first frame update
+
+    Rigidbody rb;
+    [SerializeField] float VelocidadePersonagem; //Declara variável usada para controlar a velocidade do personagem
+    
+
+    void Start()
+    {
+        rb = GetComponent<Rigidbody>(); //Coloca o componente "Rigid Body" do objeto na variável rb
+
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        //O "Input.GetAxis", basicamente, retorna um valor de 1 a -1 apertando para a esquerda/direita ou cima/baixo
+        float ValorHorizontal = Input.GetAxis("Horizontal"); 
+        float ValorVertical = Input.GetAxis("Vertical");
+
+        //Pega o objeto e aplica a velocidade/movimento
+        rb.velocity = transform.right *ValorHorizontal*VelocidadePersonagem+ transform.forward * ValorVertical * VelocidadePersonagem;
+        
+
+    }
+}
