@@ -1,0 +1,55 @@
+//Script usado para mudar gradualmente a cor da luz ambiente de acordo com o período do dia
+
+
+
+
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class colorlerp : MonoBehaviour
+{
+    [SerializeField] Color LuzAmbienteDia; //Cria campo para selecionar cor da Luz ambiente do dia
+    [SerializeField] Color LuzAmbienteNoite;//Cria campo para selecionar cor da Luz ambiente da noite
+    Color CorAtual, CorNova;
+
+    [Range(0, 1)] public float tempo; //Cria campo editável para definir a velocidade de mudança entre as cores
+
+    private AtivaTorre_DiaNoite ativaTorre_DiaNoite;
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        RenderSettings.ambientLight = LuzAmbienteNoite; //Começa com a cor da noite na luz ambiente
+        CorAtual = LuzAmbienteNoite; // Define como cor atual a luz da noite
+
+        ativaTorre_DiaNoite = FindObjectOfType<AtivaTorre_DiaNoite>(); // Busca o script que está em outro objeto
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        if (ativaTorre_DiaNoite.BateuNaTorre_DiaNoite) { //Se houve colisão com a torre e o jogador pressiona espaço
+            if (Input.GetKeyDown(KeyCode.Space))
+        {           
+        
+            //Troca a cor para que se deseja mudar a luz ambiente 
+            if (CorAtual == LuzAmbienteDia) //Quando há transição para noite 
+            {
+                CorAtual = LuzAmbienteNoite;
+            }
+
+           else
+            {
+                CorAtual = LuzAmbienteDia;
+            }
+        }
+        }
+
+        RenderSettings.ambientLight = Color.Lerp(RenderSettings.ambientLight, CorAtual, 0.001f); //Faz a transição gradual de cores entre a luz da luz ambiente
+                                                                                                 //e da cor para que se deseja mudar, chamada de "Cor atual". O 
+                                                                                                 // Colorlerp está sempre "mudando de cor" na teoria, mas como
+                                                                                                 // há momentos em que o "RenderSettings.ambientLight" será igual
+                                                                                                 //a cor atual, isso é imperceptível nessas situações.
+    }
+}
