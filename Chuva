@@ -1,0 +1,54 @@
+//Script responsável por ativar ou desligar as partículas de chuva
+
+
+
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class Chuva : MonoBehaviour
+{
+    ParticleSystem ChuvaParticulas;
+
+    private AtivaTorre_Chuva ativaTorre_Chuva;
+    bool EstaChovendo;
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        ativaTorre_Chuva = FindObjectOfType<AtivaTorre_Chuva>(); // Puxa variável que está em outro script
+        ChuvaParticulas = GetComponent<ParticleSystem>(); // Atribui variável ao sistema de partículas do objeto, no caso, da chuva.
+
+        EstaChovendo = true; //Indica que está chovendo
+        ChuvaParticulas.Play(); // Começa com as particulas ativas
+
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        if (ativaTorre_Chuva.BateuNaTorre_Chuva)// Verifica se houve colisão com o player na torre da chuva
+        {
+
+            if (Input.GetKeyDown(KeyCode.Space))// Verifica se o player pressionou espaço para interagir com a torre
+            {
+                if (EstaChovendo) //Se já está chovendo
+                {
+                    ChuvaParticulas.Stop(); //Desliga particulas
+                    EstaChovendo = false; // Indica que não está chovendo
+                }
+
+                else
+                {                    
+                    ChuvaParticulas.Play();// Liga as particulas ativas
+                    EstaChovendo = true; // Indica que está chovendo
+                }
+
+            }
+
+        }
+
+
+    }
+
+}
