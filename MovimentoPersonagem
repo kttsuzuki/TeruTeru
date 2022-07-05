@@ -1,4 +1,8 @@
-sing System.Collections;
+//Script feito para conferir movimentos no eixo X e Y do personagem
+
+
+
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
